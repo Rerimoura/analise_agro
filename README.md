@@ -20,18 +20,20 @@ agro-e-analise/
 │   ├── processed/            # Parquet após ETL
 │   └── curated/              # Exportações para análise
 ├── scraper/
-│   └── cepea_scraper.py      # Q1 — Coleta Yahoo Finance
-├── etl/
+│   └── yfinance.py           # Q1 — Coleta Yahoo Finance
+├── ETL/
 │   └── transform_load.py     # Q4 — ETL
-├── sql/
-│   ├── 01_create_tables.sql  # Q3 — DDL
-│   ├── 03_queries_analytics.sql # Q6 — Análises
-│   └── 04_indexes.sql        # Q7 — Otimização
-├── notebooks/
+├── SQL/
+│   ├── create_tables.sql     # Q3 — DDL
+│   ├── analise_A.sql         # Q6 — Análise 1
+│   ├── analise_B.sql         # Q6 — Análise 2
+│   ├── analise_C.sql         # Q6 — Análise 3
+│   └── indexes.sql           # Q7 — Otimização
+├── Notebooks/
 │   └── eda.py                # Q8 — EDA Pandas/Matplotlib
-├── app/
-│   └── streamlit_app.py      # Q9 — Dashboard
-├── tests/
+├── App/
+│   └── app.py                # Q9 — Dashboard
+├── Testes/
 │   └── test_etl.py           # Testes unitários
 └── docs/
     └── prints/               # Screenshots de todas as etapas
@@ -54,7 +56,7 @@ agro-e-analise/
 - Volume negociado disponível (permite Q6b — ranking por liquidez)
 ```bash
 pip install yfinance pandas
-python scraper/cepea_scraper.py
+python scraper/yfinance.py
 ```
 
 ---
@@ -86,7 +88,7 @@ Modelo estrela normalizado (3FN):
 - `dim_regiao` — mercado de referência (Chicago/CBOT)
 - `fato_preco` — 4.020 registros com constraint UNIQUE para idempotência
 
-**Prints:** `docs/prints/q3_tabelas_populadas.png`
+**Prints:** `docs/q3_tabelas_populadas.png`
 
 ---
 
@@ -100,7 +102,7 @@ Pipeline em 3 etapas:
 **Resultado:** 4.020 registros | 27 anomalias detectadas | 0 nulos
 ```bash
 pip install psycopg2-binary pandas pyarrow
-python etl/transform_load.py
+python ETL/transform_load.py
 ```
 
 ---
@@ -119,7 +121,7 @@ python etl/transform_load.py
 
 ### a) Preço médio mensal com variação % (LAG)
 Açúcar variou -6,81% em abril/2024. Café mostrou maior volatilidade mensal.  
-**Print:** `docs/prints/q6a_lag.png`
+**Print:** `docs/Q6A.png`
 
 ### b) Top 5 mais negociados (último ano)
 1. Milho — 37.2M de volume
@@ -128,11 +130,11 @@ Açúcar variou -6,81% em abril/2024. Café mostrou maior volatilidade mensal.
 4. Trigo — 13.1M
 5. Boi Gordo — 3.9M
 
-**Print:** `docs/prints/q6b_top5.png`
+**Print:** `docs/Q6B.png`
 
 ### c) Anomalias detectadas
 27 registros fora do intervalo ±3-sigma — principalmente algodão e trigo.  
-**Print:** `docs/prints/q6c_anomalias.png`
+**Print:** `docs/Q6C.png`
 
 ---
 
@@ -147,7 +149,7 @@ CREATE INDEX idx_fato_preco_val ON fato_preco(preco);
 **EXPLAIN ANALYZE:** Execution Time 1.730ms. Com 4.020 registros o planner
 opta por Seq Scan (correto para tabelas pequenas). Os índices serão ativados
 automaticamente pelo planner em produção com volume acima de ~10k registros.  
-**Print:** `docs/prints/q7_explain_analyze.png`
+**Print:** `docs/q7_explain_analyze.png`
 
 ---
 
@@ -164,7 +166,7 @@ automaticamente pelo planner em produção com volume acima de ~10k registros.
 | algodao | 68 | 68 | 5 |
 | acucar | 18 | 18 | 2 |
 
-**Prints:** `docs/prints/q8_boxplot.png` | `docs/prints/q8_histogramas.png` | `docs/prints/q8_scatter_temporal.png`
+**Prints:** `docs/q8_boxplot.png` | `docs/q8_histogramas.png` | `docs/q8_scatter_temporal.png`
 
 ---
 
@@ -174,10 +176,10 @@ App com 4 abas: Evolução, Comparativo, Distribuição, Anomalias.
 Filtros por produto, período. KPIs dinâmicos e média móvel 30 dias.
 ```bash
 pip install streamlit plotly psycopg2-binary
-streamlit run app/streamlit_app.py
+streamlit run App/app.py
 ```
 
-**Prints:** `docs/prints/q9_aba_*.png`
+**Prints:** `docs/app_anomalias.png` | `docs/app_comparativo.png`| `docs/app_distribuicao.png`| `docs/app_evolucao.png`
 
 ---
 
@@ -210,7 +212,7 @@ cd analise_agro
 pip install -r requirements.txt
 python scraper/yfinance.py
 python ETL/transform_load.py
-streamlit run app/app.py
+streamlit run App/app.py
 ```
 ```
 
