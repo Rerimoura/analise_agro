@@ -205,12 +205,12 @@ streamlit run app/streamlit_app.py
 
 ## Como Reproduzir
 ```bash
-git clone https://github.com/seu-usuario/agro-e-analise
-cd agro-e-analise
+git clone https://github.com/Rerimoura/analise_agro
+cd analise_agro
 pip install -r requirements.txt
-python scraper/cepea_scraper.py
-python etl/transform_load.py
-streamlit run app/streamlit_app.py
+python scraper/yfinance.py
+python ETL/transform_load.py
+streamlit run app/app.py
 ```
 ```
 
