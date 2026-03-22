@@ -35,8 +35,7 @@ agro-e-analise/
 │   └── app.py                # Q9 — Dashboard
 ├── Testes/
 │   └── test_etl.py           # Testes unitários
-└── docs/
-    └── prints/               # Screenshots de todas as etapas
+└── docs/                     # Screenshots de todas as etapas
 ```
 
 ---
