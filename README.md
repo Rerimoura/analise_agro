@@ -36,6 +36,8 @@ agro-e-analise/
 ├── Testes/
 │   └── test_etl.py           # Testes unitários
 └── docs/                     # Screenshots de todas as etapas
+requirements.txt
+
 ```
 
 ---
