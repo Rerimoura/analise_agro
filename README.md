@@ -1,6 +1,6 @@
-# 🌾 Agro-e | Avaliação Técnica — Analista de Dados (Webscraping)
+# Agro-e | Avaliação técnica — Analista de dados (Webscraping)
 
-## Visão Geral
+## Visão geral
 Pipeline completo de dados de commodities agrícolas: coleta via Yahoo Finance,
 ETL com Python, armazenamento em PostgreSQL (Neon), análise exploratória e
 dashboard interativo com Streamlit.
@@ -42,7 +42,7 @@ requirements.txt
 
 ---
 
-## Q1 — Coleta de Dados (Webscraping)
+## Q1 — Coleta de dados (Webscraping)
 
 **Fonte escolhida:** Yahoo Finance via biblioteca `yfinance`
 
