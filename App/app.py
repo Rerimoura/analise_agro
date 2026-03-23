@@ -4,6 +4,10 @@ import psycopg2
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import date, timedelta
+from datetime import datetime
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 st.set_page_config(
     page_title='Agro-e | Commodities Dashboard',
@@ -11,8 +15,7 @@ st.set_page_config(
     layout='wide'
 )
 
-CONN_STRING = "postgresql://neondb_owner:npg_tXh95PpLqCAO@ep-patient-hill-am77ex2z-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require"
-
+CONN_STRING = os.getenv("CONN_STRING")
 @st.cache_data(ttl=3600)
 def load_data():
     conn = psycopg2.connect(CONN_STRING)
