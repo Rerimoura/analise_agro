@@ -47,14 +47,14 @@ requirements.txt
 **Fonte escolhida:** Yahoo Finance via biblioteca `yfinance`
 
 **Tentativas e decisão técnica:**
-- **CEPEA/ESALQ:** retornou erro 403 (proteção Cloudflare/WAF) — bloqueio de scraping direto
+- **CEPEA/ESALQ:** retornou erro 403 (proteção Cloudflare/WAF), bloqueio de scraping direto
 - **BCB/SGS:** timeout persistente por instabilidade do servidor na data da coleta
 - **Yahoo Finance:** API pública estável, sem bloqueio, dados reais de futuros CBOT
 
 **Desafios encontrados e resolvidos:**
 - Colunas em MultiIndex dependendo da versão do yfinance (resolvido com flatten)
-- Dados em USD (futuros internacionais) — documentado nas análises
-- Volume negociado disponível (permite Q6b — ranking por liquidez)
+- Dados em USD (futuros internacionais), documentado nas análises
+- Volume negociado disponível (permite Q6b, ranking por liquidez)
 ```bash
 pip install yfinance pandas
 python scraper/yfinance.py
@@ -98,7 +98,7 @@ Modelo estrela normalizado (3FN):
 Pipeline em 3 etapas:
 1. **Extract:** lê todos os CSVs de `data/raw/`
 2. **Transform:** padroniza commodity (lowercase), converte datas, detecta anomalias (3-sigma)
-3. **Load:** inserção em lote com `execute_values` — 3 queries ao banco (vs 16.000 em loop)
+3. **Load:** inserção em lote com `execute_values`, 3 queries ao banco (vs 16.000 em loop)
 
 **Resultado:** 4.020 registros | 27 anomalias detectadas | 0 nulos
 ```bash
@@ -121,20 +121,21 @@ python ETL/transform_load.py
 ## Q6 — Análises SQL
 
 ### a) Preço médio mensal com variação % (LAG)
-Açúcar variou -6,81% em abril/2024. Café mostrou maior volatilidade mensal.  
+Açúcar variou -6,81% em abril/2024. 
+Café mostrou maior volatilidade mensal.  
 **Print:** `docs/Q6A.png`
 
 ### b) Top 5 mais negociados (último ano)
-1. Milho — 37.2M de volume
-2. Soja — 22.4M
-3. Açúcar — 15.2M
-4. Trigo — 13.1M
-5. Boi Gordo — 3.9M
+1. Milho: 37.2M de volume
+2. Soja: 22.4M de volume
+3. Açúcar: 15.2M de volume
+4. Trigo: 13.1M de volume
+5. Boi Gordo: 3.9M de volume
 
 **Print:** `docs/Q6B.png`
 
 ### c) Anomalias detectadas
-27 registros fora do intervalo ±3-sigma — principalmente algodão e trigo.  
+27 registros fora do intervalo ±3-sigma, principalmente algodão e trigo.  
 **Print:** `docs/Q6C.png`
 
 ---
@@ -173,8 +174,9 @@ automaticamente pelo planner em produção com volume acima de ~10k registros.
 
 ## Q9 — Dashboard Streamlit
 
-App com 4 abas: Evolução, Comparativo, Distribuição, Anomalias.  
-Filtros por produto, período. KPIs dinâmicos e média móvel 30 dias.
+App com 4 abas: Evolução, comparativo, distribuição, anomalias.  
+Filtros por produto, período. 
+KPIs dinâmicos e média móvel 30 dias.
 ```bash
 pip install streamlit plotly psycopg2-binary
 streamlit run App/app.py
@@ -184,23 +186,23 @@ streamlit run App/app.py
 
 ---
 
-## Q10 — Insights e Documentação
+## Q10 — Insights e documentação
 
 **Padrões identificados:**
 - Cacau com maior volatilidade absoluta (+340% de variação no período)
-- Café com distribuição bimodal — dois regimes de preço distintos
-- Milho e soja são os mais líquidos — maior volume negociado
+- Café com distribuição bimodal, dois regimes de preço distintos
+- Milho e soja são os mais líquidos, maior volume negociado
 - Boi gordo em tendência de alta consistente em 2025
 
 **Aplicações práticas para o agronegócio:**
 - Alertas automáticos de anomalia de preço para cooperativas e tradings
 - Modelo preditivo de preço com séries temporais (Prophet/ARIMA)
-- Suporte à decisão de hedge — identificar janelas de preço favorável
+- Suporte à decisão de hedge, identificar janelas de preço favorável
 - Correlação entre commodities para diversificação de portfólio
 
 **Limitações da fonte:**
-- Preços em USD (futuros CBOT) — não refletem diretamente o mercado físico brasileiro
-- Futuros ≠ preço spot — há diferença de base regional
+- Preços em USD (futuros CBOT), não refletem diretamente o mercado físico brasileiro
+- Futuros ≠ preço spot, há diferença de base regional
 - Yahoo Finance não garante SLA de disponibilidade para uso em produção
 - Para uso comercial recomenda-se CEPEA/ESALQ ou Bloomberg como fonte primária
 
@@ -210,6 +212,8 @@ streamlit run App/app.py
 ```bash
 git clone https://github.com/Rerimoura/analise_agro
 cd analise_agro
+python -m venv venv
+venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 python scraper/yfinance.py
 python ETL/transform_load.py
@@ -221,11 +225,13 @@ streamlit run App/app.py
 
 Cria também o `requirements.txt` na raiz:
 ```
-yfinance
-pandas
-psycopg2-binary
-pyarrow
-matplotlib
-plotly
-streamlit
-pytest
+yfinance==0.2.54
+pandas==2.2.3
+psycopg2-binary==2.9.11
+pyarrow==16.1.0
+matplotlib==3.9.4
+plotly==5.24.1
+streamlit==1.40.0
+altair==4.2.2
+pytest==8.3.5
+python-dotenv==1.0.1
